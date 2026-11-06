@@ -1,0 +1,297 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Text Animation Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&family=Montserrat:wght@900&family=Bebas+Neue&family=Anton&family=Oswald:wght@600&family=Archivo+Black&family=Righteous&family=Space+Grotesk:wght@700&family=Syne:wght@800&family=Lilita+One&family=Playfair+Display:wght@800&family=Pacifico&family=Permanent+Marker&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700&family=Noto+Sans+Bengali:wght@500;800&family=Anek+Bangla:wght@500;800&family=Baloo+Da+2:wght@600;800&family=Atma:wght@600;700&family=Galada&family=Tiro+Bangla&family=Noto+Serif+Bengali:wght@600;800&display=swap">
+<style>
+:root{--bg:#f3f4f8;--pn:#fff;--tx:#12151c;--mu:#6b7280;--bd:#dcdfe8;--ac:#6a5cff;--tr:#e8eaf1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1117;--pn:#171b24;--tx:#eef0f6;--mu:#8b93a5;--bd:#272c38;--ac:#8b7bff;--tr:#202531}}
+:root[data-theme=dark]{--bg:#0e1117;--pn:#171b24;--tx:#eef0f6;--mu:#8b93a5;--bd:#272c38;--ac:#8b7bff;--tr:#202531}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:13px Inter,system-ui,"Noto Sans Bengali",sans-serif}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:var(--pn);border-bottom:1px solid var(--bd)}
+h1{font-size:15px;margin:0 8px 0 0}
+button,select,input,textarea{font:inherit;color:var(--tx);background:var(--tr);border:1px solid var(--bd);border-radius:7px;padding:6px 10px}
+button{cursor:pointer}.p,label.f{background:var(--ac);border-color:var(--ac);color:#fff}label.f{cursor:pointer;border-radius:7px;padding:6px 10px}input[type=file]{display:none}
+main{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:10px;padding:10px}@media(max-width:860px){main{grid-template-columns:1fr}}
+.pn{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:10px}
+#sw{display:flex;justify-content:center;background:var(--tr);border-radius:8px;padding:6px}
+#stage{position:relative;height:50vh;aspect-ratio:var(--ar,16/9);max-width:100%;overflow:hidden;border-radius:6px;background:#0b0d12 repeating-conic-gradient(#1b1e26 0 25%,#12141a 0 50%) 0 0/24px 24px}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}#ov{position:absolute;inset:0;pointer-events:none}#hit{position:absolute;inset:0;cursor:default;touch-action:none}#hit.ty{cursor:crosshair}#ed{position:absolute;z-index:3;width:min(320px,80%);background:rgba(0,0,0,.7);color:#fff;border:1px dashed #fff;border-radius:6px;padding:6px 8px;font:600 18px Inter,'Hind Siliguri',sans-serif;resize:none;min-height:44px}
+.box{position:absolute;display:none;align-items:center;justify-content:center;font-family:Inter,sans-serif}
+.in{display:flex;flex-wrap:wrap;justify-content:center;max-width:100%;text-align:center;line-height:1.15;padding:.08em .15em}
+.wd{display:inline-flex;margin:0 .13em;white-space:nowrap}.ch{display:inline-block;white-space:pre}
+.bar{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+#tl{overflow-x:auto;position:relative;margin-top:8px;border:1px solid var(--bd);border-radius:8px;background:var(--pn)}
+#tin{position:relative}.row{position:relative;border-bottom:1px solid var(--bd)}
+.lab{position:sticky;left:0;z-index:6;display:inline-flex;gap:4px;align-items:center;font-size:11px;color:var(--mu);background:var(--pn);padding:2px 6px;border-radius:0 0 6px 0}.lab button{padding:0 6px}
+#ru{height:22px}#vt{height:30px}#tt{height:46px;background:var(--tr)}#at{height:64px}
+#vn{position:absolute;top:3px;bottom:3px;left:0;border-radius:5px;background:linear-gradient(90deg,#3b82f6,#6a5cff);opacity:.8;color:#fff;font-size:11px;padding:4px 80px;white-space:nowrap;overflow:hidden}
+#wf{position:absolute;top:0;left:0}
+.cue{position:absolute;top:5px;height:36px;background:var(--ac);color:#fff;border-radius:6px;padding:3px 10px;overflow:hidden;white-space:nowrap;font-size:11px;cursor:grab;touch-action:none;user-select:none;border:2px solid transparent;opacity:.93}
+.cue.sel{border-color:#fff;box-shadow:0 0 0 2px var(--ac)}.cue small{display:block;opacity:.7;font-size:9px}
+.cue i{position:absolute;top:2px;bottom:2px;width:1px;background:rgba(255,255,255,.55)}
+.h{position:absolute;top:0;bottom:0;width:9px;cursor:ew-resize;background:rgba(255,255,255,.4)}.h.l{left:0}.h.r{right:0}@media(pointer:coarse){.h{width:16px}}
+#ph{position:absolute;top:0;bottom:0;width:2px;background:#ff4d6d;z-index:5;pointer-events:none}.gd{position:absolute;top:0;bottom:0;width:1px;background:#ffb020;z-index:4;pointer-events:none}
+h3{margin:12px 0 6px;font-size:11px;color:var(--mu)}
+.g{display:grid;grid-template-columns:62px 1fr;gap:6px;align-items:center;margin:5px 0}textarea{width:100%;min-height:60px}
+#fx{display:grid;grid-template-columns:1fr 1fr;gap:5px}#fx button{text-align:left}#fx .on{background:var(--ac);border-color:var(--ac);color:#fff}
+.mr{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:4px 0;color:var(--mu)}.mr b{color:var(--tx);font-weight:600}.mr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:right}
+#msg{color:var(--mu);font-size:11px;margin-top:6px}
+#sg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px}.sb{display:flex;flex-direction:column;gap:3px;padding:4px;text-align:center}.sb .pv{display:flex;justify-content:center;align-items:center;height:46px;width:100%;background:#0f1219;border-radius:5px;white-space:nowrap;overflow:hidden}.sb small{color:var(--mu);font-size:10px}.sb.on{background:var(--ac);border-color:var(--ac)}.sb.on small{color:#fff}/* Redesigned Styles */
+button {
+  background: var(--tr);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+button:hover {
+  background: var(--bd);
+}
+button.p {
+  background: var(--ac);
+  border-color: var(--ac);
+  color: #fff;
+}
+.pn {
+  background: var(--pn);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 12px;
+}
+#stage {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+}
+#tl {
+  border-radius: 12px;
+  border: 1px solid var(--bd);
+}
+.cue {
+  border-radius: 8px;
+}
+</style>
+</head><body data-agent="Text Animation Studio. Call window.TAS.help() for the agent guide and window.TAS.state() for the live state.">
+<header><h1>Text Animation Studio</h1>
+<label class="f">Video<input type="file" id="fv" accept="video/*"></label>
+<label class="f">Audio<input type="file" id="fa" accept="audio/*"></label>
+<label class="f">Text (SRT / JSON)<input type="file" id="ft" accept=".srt,.json,.txt"></label>
+<button id="add">+ Text at playhead</button></header>
+<main><div>
+<div class="pn"><div id="sw"><div id="stage"><video id="v" playsinline></video><div id="ov"></div><div id="hit"></div></div></div>
+<div class="bar"><button id="pp" class="p">▶</button><span id="tm"></span><button id="ty" title="Type tool: click the player to write text there">T Type</button><span style="flex:1"></span>
+<label>Ratio <select id="rt"><option value="">Auto</option><option>16/9</option><option>9/16</option><option>1/1</option><option>4/5</option></select></label>
+<label>Zoom <input type="range" id="zm" min="20" max="240" value="80"></label></div>
+<div id="tl"><div id="tin">
+<div class="row" id="ru"><span class="lab">time</span></div>
+<div class="row" id="vt"><span class="lab">VIDEO <button id="vm" title="Mute or unmute the video's own sound">🔊</button></span><div id="vn"></div></div>
+<div class="row" id="tt"><span class="lab">TEXT</span></div>
+<div class="row" id="at"><canvas id="wf"></canvas><span class="lab">AUDIO <button id="am" title="Mute or unmute">🔊</button></span></div>
+<div id="ph"></div><div class="gd" id="g1"></div><div class="gd" id="g2"></div></div></div>
+<div id="msg">Drag a text block to move it, drag its edges to resize. The waveform sits right under the text track, so you can see where speech starts, ends and pauses. Click the ruler or tracks to seek.</div></div></div>
+<aside class="pn"><h3>Media</h3>
+<div class="mr"><b>Video</b><span id="mv">none</span><button id="xv">✕</button></div>
+<div class="mr"><b>Audio</b><span id="ma">none</span><button id="xa">✕</button></div>
+<div class="mr"><b>Text</b><span id="mt">demo</span><button id="xt">✕</button></div>
+<h3>Selected text</h3><textarea id="tx" placeholder="Select a text block"></textarea>
+<div class="g"><span>Start</span><input id="ts" type="number" step="0.05"></div><div class="g"><span>End</span><input id="te" type="number" step="0.05"></div>
+<div class="g"><span>Dur</span><input id="du" type="number" step="0.1" min="0.2"></div><div class="bar"><button id="ss">Start = playhead</button><button id="se">End = playhead</button></div><div class="g"><span>Font</span><select id="fo"></select></div><div id="sl"></div>
+<div class="g"><span>Exit</span><select id="ex"></select></div>
+<div class="bar"><button id="del">Delete</button><button id="all">Animation to all</button></div>
+<h3>Text styles</h3><div id="sg"></div><div class="bar"><button id="sall">Style to all</button></div>
+<h3>Animations</h3><div id="fx"></div>
+<h3>AI agent control</h3><div class="bar"><button id="cg">Copy agent guide</button><button id="cr" class="p">Run commands</button></div><textarea id="cb" placeholder="Paste a JSON list of commands, then Run"></textarea>
+<h3>AI transcription prompt</h3><div class="bar"><button id="cp" class="p">Copy prompt</button></div><textarea id="pr" readonly style="min-height:150px"></textarea>
+<h3>Export (copies to clipboard)</h3><div class="bar"><button id="xj">JSON</button><button id="xs">SRT</button></div><textarea id="out" readonly></textarea></aside></main>
+<audio id="au"></audio>
+<script>
+const $=s=>document.querySelector(s),clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),esc=s=>s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+const E={o3:x=>1-Math.pow(1-x,3),o5:x=>1-Math.pow(1-x,5),i3:x=>x*x*x,bk:x=>1+2.9*Math.pow(x-1,3)+1.9*Math.pow(x-1,2),el:x=>x==0||x==1?x:Math.pow(2,-10*x)*Math.sin((x*10-.75)*2.0944)+1,io:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const rn=i=>{const v=Math.sin(i*127.1+311.7)*43758.5453;return v-Math.floor(v)};
+const FX=[['wordsync','Word reveal'],['charRise','Letter rise'],['spin','Spin in'],['zoomSlam','Zoom slam'],['slideMask','Slide mask'],['typewriter','Typewriter'],['bounce','Bounce drop'],['tracking','Tracking in'],['flip','Flip up'],['glitch','Glitch'],['scatter','Scatter assemble'],['wipe','Wipe reveal'],['fadeUp','Fade up'],['blurZoom','Blur zoom']];
+const EX=[['fade','Fade'],['scaleOut','Scale down'],['slideOut','Slide out'],['blurUp','Blur up'],['spinOut','Spin out'],['dropOut','Drop'],['zoomOut','Zoom out']];
+// name, fill, accent gradient, full gradient, glow1, glow2, weight, uppercase, scale
+const ST=[['Violet glow','#fff','linear-gradient(90deg,#b7acff,#6fdcff)',0,'#7a6bff','#35c4ff',800,0,1],['Gold caps light','#fff','linear-gradient(90deg,#fff0bf,#ffb561)',0,'#ffb347','#ff8a3d',300,1,.78],['Gold glow',0,0,'linear-gradient(90deg,#ffe6a3,#ff9a4f)','#ff9a3d','#ff6a00',900,0,1],['White caps','#fff',0,0,'#9fc2ff','#fff',800,1,.85],['Neon cyan','#fff',0,0,'#3fd0ff','#1e7bff',700,0,.95],['Mint glow',0,0,'linear-gradient(90deg,#b8ffe0,#6fe6ff)','#3dffc0','#22c1ff',800,0,1],['Pink caps','#fff','linear-gradient(90deg,#ffa3c4,#ffd0a0)',0,'#ff6fa0','#ff9d6b',900,1,.85]];
+const CX=/[\u0900-\u0DFF\u0600-\u06FF]/,FO=[['Inter',0,0],['Poppins',800,0],['Montserrat',900,0],['Bebas Neue',400,0],['Anton',400,0],['Oswald',600,0],['Archivo Black',400,0],['Righteous',400,0],['Space Grotesk',700,0],['Syne',800,0],['Lilita One',400,0],['Playfair Display',800,0],['Pacifico',400,0],['Permanent Marker',400,0],['Hind Siliguri',700,1],['Noto Sans Bengali',800,1],['Anek Bangla',800,1],['Baloo Da 2',800,1],['Atma',700,1],['Galada',400,1],['Tiro Bangla',400,1],['Noto Serif Bengali',800,1]],fam=f=>`'${f[0]}',${f[2]?'Inter':'Hind Siliguri'},sans-serif`,SL=[['sz','Size',3,12,.25,6.5],['px','X',0,100,.5,50],['py','Y',0,100,.5,50],['rz','Rotate',-180,180,1,0],['sk','Scale',.3,3,.05,1],['wd','Width',20,100,1,90],['gl','Glow',.3,2.5,.1,1]];
+let cues=[],sel=0,pps=80,dur=10,adur=0,nid=0,boxes={},pk=null,hasV=0,hasA=0,aSrc='',playing=0,c0=0,tb=0,stopAt=0;
+const v=$('#v'),au=$('#au'),ov=$('#ov'),tl=$('#tl'),stg=$('#stage'),sc=()=>cues.find(c=>c.id==sel),msg=t=>$('#msg').textContent=t,rb=c=>{boxes[c.id]?.remove();delete boxes[c.id]};
+FX.forEach(([k,n])=>{const b=document.createElement('button');b.textContent=n;b.dataset.k=k;b.onclick=()=>{const c=sc();if(!c)return;c.fx=k;rb(c);drawTl();fields();setT(Math.max(0,c.s-.4));stopAt=c.e+.5;if(!playing)toggle()};$('#fx').appendChild(b)});
+ST.forEach((s,i)=>{const b=document.createElement('button');b.className='sb';const d=document.createElement('div');d.className='pv';d.style.cssText=`font-weight:${s[6]};letter-spacing:${s[7]?'.04em':'-.02em'};font-size:${17*s[8]}px;filter:drop-shadow(0 0 2px ${s[4]}) drop-shadow(0 0 8px ${s[5]})`;
+ ['My','caption'].forEach((w,wi)=>{const sp=document.createElement('span');sp.textContent=s[7]?w.toUpperCase():w;sp.style.margin='0 .13em';const g=s[3]||(s[2]&&wi==1?s[2]:'');if(g){sp.style.backgroundImage=g;sp.style.webkitBackgroundClip=sp.style.backgroundClip='text';sp.style.color='transparent'}else sp.style.color=s[1]||'#fff';d.appendChild(sp)});
+ const l=document.createElement('small');l.textContent=s[0];b.append(d,l);b.onclick=()=>{const c=sc();if(!c)return;c.st=i;rb(c);fields();if(!playing)setT((c.s+c.e)/2)};$('#sg').appendChild(b)});
+$('#sall').onclick=()=>{const c=sc();if(c){cues.forEach(x=>{x.st=c.st;rb(x)});drawTl()}};
+EX.forEach(([k,n])=>$('#ex').add(new Option(n,k)));
+FO.forEach((f,i)=>{const o=new Option((f[2]?'BN ':'')+f[0],i);o.style.fontFamily=fam(f);$('#fo').add(o)});$('#fo').onchange=e=>{const c=sc();if(c)c.fo=+e.target.value};
+SL.forEach(([k,n,a,b,s])=>{const d=document.createElement('div');d.className='g';d.innerHTML=`<span>${n}</span><input type="range" id="sl_${k}" min="${a}" max="${b}" step="${s}">`;$('#sl').appendChild(d);d.lastChild.oninput=e=>{const c=sc();if(c)c[k]=+e.target.value}});
+function spread(c){const w=c.text.split(/\s+/).filter(Boolean),T=w.join('').length||1;let a=0;return w.map(x=>{const s=c.s+(c.e-c.s)*.8*a/T;a+=x.length;return[x,s,c.s+(c.e-c.s)*.8*a/T]})}
+function mk(o,i){const c={id:++nid,s:o.s,e:o.e,text:o.text,fx:o.fx||FX[(i*5+Math.floor(i/3))%14][0],st:o.st??(i*3+Math.floor(i/7))%7,ex:o.ex||EX[(i*3+1)%7][0],sz:o.sz||6.5,fo:o.fo??0,px:o.px??50,py:o.py??50,rz:o.rz??0,sk:o.sk??1,wd:o.wd??90,gl:o.gl??1};c.words=o.words||spread(c);return c}
+function setRange(c,ns,ne){const k=(ne-ns)/(c.e-c.s||1);c.words.forEach(w=>{w[1]=ns+(w[1]-c.s)*k;w[2]=ns+(w[2]-c.s)*k});c.s=ns;c.e=ne}
+function parseSrt(t){const o=[];t.replace(/\r/g,'').split(/\n\s*\n/).forEach(b=>{const m=b.match(/(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)\n([\s\S]+)/);if(m){const f=(h,mi,s,ms)=>+h*3600+ +mi*60+ +s+ +ms/1000;o.push({s:f(...m.slice(1,5)),e:f(...m.slice(5,9)),text:m[9].replace(/\n/g,' ').trim()})}});return o}
+$('#ft').onchange=async e=>{const f=e.target.files[0];if(!f)return;const t=await f.text();let a=[];
+ try{const j=JSON.parse(t);(Array.isArray(j)?j:j.cues||[]).forEach(c=>{const w=c.words;a.push({s:+(c.s??c.start??0),e:+(c.e??c.end??0),text:c.text??(w?w.map(x=>x[0]).join(' '):''),words:w&&w.map(x=>[x[0],+x[1],+x[2]]),fx:c.fx,st:c.st,ex:c.ex,sz:c.sz,fo:c.fo,px:c.px,py:c.py,rz:c.rz,sk:c.sk,wd:c.wd,gl:c.gl})})}catch{a=parseSrt(t)}
+ Object.values(boxes).forEach(b=>b.remove());boxes={};cues=a.filter(x=>x.text).map(mk);sel=cues[0]?.id||0;$('#mt').textContent=f.name+' ('+cues.length+')';fitDur();fields()};
+$('#xt').onclick=()=>{Object.values(boxes).forEach(b=>b.remove());boxes={};cues=[];sel=0;$('#mt').textContent='none';fitDur();fields()};
+function peaks(b){const d=b.getChannelData(0),n=Math.ceil(b.duration*200),p=new Float32Array(n),s=d.length/n;for(let i=0;i<n;i++){let m=0;const a=Math.floor(i*s),z=Math.min(d.length,Math.floor((i+1)*s)),q=Math.max(1,Math.floor((z-a)/20));for(let j=a;j<z;j+=q){const x=Math.abs(d[j]);if(x>m)m=x}p[i]=m}return p}
+function wave(){const c=$('#wf'),W=tl.clientWidth,h=64;c.width=W;c.height=h;c.style.left=tl.scrollLeft+'px';const x=c.getContext('2d');if(!pk)return;x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--ac');
+ for(let i=0;i<W;i++){const t=(tl.scrollLeft+i)/pps,a=Math.floor(t*200),z=Math.max(a+1,Math.floor((t+1/pps)*200));let m=0;for(let j=a;j<z&&j<pk.length;j++)m=Math.max(m,pk[j]);const hh=Math.min(1,m*1.8)*h/2;x.fillRect(i,h/2-hh,1,Math.max(1,hh*2))}}
+async function loadA(f,src){try{const ac=new(window.AudioContext||window.webkitAudioContext)(),b=await ac.decodeAudioData(await f.arrayBuffer());pk=peaks(b);adur=b.duration;au.src=URL.createObjectURL(f);hasA=1;aSrc=src;v.muted=true;$('#ma').textContent=(src=='video'?'from video: ':'')+f.name;btns();fitDur();setT(0);msg(src=='video'?'Audio extracted from the video onto its own track. The video track is muted so nothing plays twice.':'Audio loaded. The video track is muted; use its speaker button to bring the video sound back.')}catch(err){msg('This file has no audio the browser can read.')}}
+$('#fa').onchange=e=>{const f=e.target.files[0];if(f)loadA(f,'audio')};
+$('#fv').onchange=async e=>{const f=e.target.files[0];if(!f)return;v.src=URL.createObjectURL(f);hasV=1;v.muted=hasA&&aSrc=='audio';$('#mv').textContent=f.name;$('#vn').textContent=f.name;
+ v.onloadedmetadata=()=>{if(!$('#rt').value)stg.style.setProperty('--ar',v.videoWidth+'/'+v.videoHeight);fitDur();setT(0)};if(!hasA||aSrc=='video')await loadA(f,'video');btns()};
+function rmA(){hasA=0;aSrc='';au.removeAttribute('src');au.load();pk=null;adur=0;$('#ma').textContent='none';if(hasV)v.muted=false;btns();fitDur()}
+$('#xa').onclick=rmA;$('#xv').onclick=()=>{if(aSrc=='video')rmA();hasV=0;v.removeAttribute('src');v.load();$('#mv').textContent='none';$('#vn').textContent='';fitDur()};
+const btns=()=>{$('#vm').textContent=v.muted?'🔇':'🔊';$('#am').textContent=au.muted?'🔇':'🔊'};
+$('#vm').onclick=()=>{v.muted=!v.muted;btns()};$('#am').onclick=()=>{au.muted=!au.muted;btns()};
+$('#rt').onchange=e=>stg.style.setProperty('--ar',e.target.value||(hasV&&v.videoWidth?v.videoWidth+'/'+v.videoHeight:'16/9'));
+function fitDur(){dur=Math.max(10,adur,hasV&&v.duration||0,...cues.map(c=>c.e));drawTl()}
+function pos(d,c){d.style.left=c.s*pps+'px';d.style.width=Math.max(10,(c.e-c.s)*pps)+'px'}
+function guides(){const c=sc();['g1','g2'].forEach((id,i)=>{const g=$('#'+id);g.style.display=c?'block':'none';if(c)g.style.left=(i?c.e:c.s)*pps+'px'})}
+function drawTl(){$('#tin').style.width=Math.ceil(dur*pps)+80+'px';const ru=$('#ru');ru.querySelectorAll('.tk').forEach(n=>n.remove());const sp=pps<40?10:pps<100?5:2;
+ for(let t=0;t<=dur;t+=sp){const k=document.createElement('span');k.className='tk';k.style.cssText=`position:absolute;left:${t*pps}px;top:6px;font-size:10px;color:var(--mu);padding-left:3px;border-left:1px solid var(--bd)`;k.textContent=t+'s';ru.appendChild(k)}
+ $('#vn').style.width=(hasV&&v.duration?v.duration*pps:0)+'px';const tt=$('#tt');tt.querySelectorAll('.cue').forEach(n=>n.remove());
+ cues.forEach(c=>{const d=document.createElement('div');d.className='cue'+(c.id==sel?' sel':'');d.dataset.id=c.id;pos(d,c);
+  d.innerHTML='<div class="h l"></div>'+esc(c.text)+'<small>'+FX.find(f=>f[0]==c.fx)[1]+'</small>'+c.words.map(w=>`<i style="left:${(w[1]-c.s)/(c.e-c.s||1)*100}%"></i>`).join('')+'<div class="h r"></div>';
+  d.onpointerdown=e=>drag(e,c,d);tt.appendChild(d)});guides();wave()}
+function pick(id){sel=id;document.querySelectorAll('.cue').forEach(n=>n.classList.toggle('sel',n.dataset.id==id));fields();guides()}
+function drag(e,c,d){pick(c.id);const m=e.target.classList.contains('l')?'l':e.target.classList.contains('r')?'r':'m',x0=e.clientX,s0=c.s,e0=c.e,w0=c.words.map(w=>[...w]);d.setPointerCapture(e.pointerId);
+ d.onpointermove=ev=>{const dt=Math.round((ev.clientX-x0)/pps/.02)*.02;let ns=s0,ne=e0;if(m=='m'){ns=Math.max(0,s0+dt);ne=ns+e0-s0}else if(m=='l')ns=clamp(s0+dt,0,e0-.2);else ne=Math.max(s0+.2,e0+dt);
+  c.words=w0.map(w=>[...w]);c.s=s0;c.e=e0;setRange(c,ns,ne);pos(d,c);guides();fields(1)};
+ d.onpointerup=()=>{d.onpointermove=d.onpointerup=null;fitDur()};e.stopPropagation()}
+function fields(keep){const c=sc();if(!keep)$('#tx').value=c?c.text:'';$('#ts').value=c?c.s.toFixed(2):'';$('#te').value=c?c.e.toFixed(2):'';if(c){$('#ex').value=c.ex;$('#fo').value=c.fo;$('#du').value=(c.e-c.s).toFixed(2);SL.forEach(([k,,,,,d])=>$('#sl_'+k).value=c[k]??d)}document.querySelectorAll('#sg button').forEach((b,i)=>b.classList.toggle('on',!!c&&i==c.st));document.querySelectorAll('#fx button').forEach(b=>b.classList.toggle('on',!!c&&b.dataset.k==c.fx))}
+$('#tx').oninput=e=>{const c=sc();if(c){c.text=e.target.value;c.words=spread(c);rb(c);drawTl()}};
+$('#ts').onchange=e=>{const c=sc();if(c){setRange(c,clamp(+e.target.value,0,c.e-.2),c.e);fitDur()}};$('#te').onchange=e=>{const c=sc();if(c){setRange(c,c.s,Math.max(c.s+.2,+e.target.value));fitDur()}};
+$('#ex').onchange=e=>{const c=sc();if(c)c.ex=e.target.value};
+$('#all').onclick=()=>{const c=sc();if(c){cues.forEach(x=>{x.fx=c.fx;x.ex=c.ex;rb(x)});drawTl();fields()}};
+$('#del').onclick=()=>{const c=sc();if(c){rb(c);cues=cues.filter(x=>x!=c);sel=0;drawTl();fields()}};
+$('#add').onclick=()=>{const t=cur(),c=mk({s:t,e:t+2,text:'New text'},cues.length);cues.push(c);sel=c.id;fitDur();fields()};
+function ts(t){const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return[h,m].map(x=>String(x).padStart(2,'0')).join(':')+':'+s.toFixed(3).padStart(6,'0').replace('.',',')}
+function out(t){$('#out').value=t;navigator.clipboard?.writeText(t).then(()=>msg('Copied to clipboard.'),()=>msg('Select the text in the export box and copy it.'))}
+$('#xj').onclick=()=>out(JSON.stringify(cues.map(c=>({s:+c.s.toFixed(3),e:+c.e.toFixed(3),text:c.text,words:c.words.map(w=>[w[0],+w[1].toFixed(3),+w[2].toFixed(3)]),fx:c.fx,st:c.st,ex:c.ex,sz:c.sz,fo:c.fo,px:c.px,py:c.py,rz:c.rz,sk:c.sk,wd:c.wd,gl:c.gl})),null,1));
+$('#xs').onclick=()=>out(cues.slice().sort((a,b)=>a.s-b.s).map((c,i)=>(i+1)+'\n'+ts(c.s)+' --> '+ts(c.e)+'\n'+c.text+'\n').join('\n'));
+const now=()=>playing?tb+(performance.now()-c0)/1000:tb,cur=()=>hasA?au.currentTime:hasV?v.currentTime:Math.min(dur,now());
+function setT(t){t=clamp(t,0,dur);tb=t;c0=performance.now();if(hasA)au.currentTime=t;if(hasV)v.currentTime=t}
+function toggle(){playing=!playing;if(playing){c0=performance.now();hasA&&au.play();hasV&&v.play()}else{tb=cur();hasA&&au.pause();hasV&&v.pause();stopAt=0}$('#pp').textContent=playing?'⏸':'▶'}
+$('#pp').onclick=toggle;$('#zm').oninput=e=>{pps=+e.target.value;drawTl()};tl.onscroll=wave;addEventListener('resize',wave);
+tl.onpointerdown=e=>{if(e.target.closest('.cue,.lab'))return;stopAt=0;setT((e.clientX-$('#tin').getBoundingClientRect().left)/pps)};
+addEventListener('keydown',e=>{if(/TEXTAREA|INPUT|SELECT/.test(document.activeElement.tagName))return;if(e.code=='Space'){e.preventDefault();toggle()}if(e.key=='Delete')$('#del').click()});
+function build(c){const s=ST[c.st],b=document.createElement('div');b.className='box';const n=document.createElement('div');n.className='in';b.appendChild(n);
+ const mx=c.words.reduce((m,w,i)=>w[0].length>c.words[m][0].length?i:m,0);c.els=[];let ci=0;
+ c.words.forEach((w,wi)=>{const wd=document.createElement('span');wd.className='wd';(CX.test(w[0])?[w[0]]:[...(s[7]?w[0].toUpperCase():w[0])]).forEach(ch=>{const sp=document.createElement('span');sp.className='ch';sp.textContent=ch;const g=s[3]||(s[2]&&wi==mx?s[2]:'');
+  if(g){sp.style.backgroundImage=g;sp.style.webkitBackgroundClip=sp.style.backgroundClip='text';sp.style.color='transparent'}else sp.style.color=s[1]||'#fff';wd.appendChild(sp);c.els.push({el:sp,w:wi,c:ci++})});n.appendChild(wd)});
+ b.style.fontWeight=s[6];b.style.letterSpacing=CX.test(c.text)?'0':(s[7]?'.04em':'-.02em');c.inn=n;c.nC=ci;ov.appendChild(b);boxes[c.id]=b;return b}
+function upd(t){const W=ov.clientWidth,k=W/1920,px=t*pps;$('#tm').textContent=t.toFixed(2)+' / '+dur.toFixed(2);$('#ph').style.left=px+'px';
+ if(playing&&(px>tl.scrollLeft+tl.clientWidth-30||px<tl.scrollLeft))tl.scrollLeft=Math.max(0,px-40);
+ cues.forEach(c=>{let b=boxes[c.id];const t0=c.s-.1,tE=c.e,tO=.24;if(t<t0||t>tE+tO+.01){if(b)b.style.display='none';return}
+  if(!b)b=build(c);b.style.display='flex';const s=ST[c.st];const f=FO[c.fo]||FO[0];b.style.fontFamily=fam(f);b.style.fontWeight=f[1]||s[6];b.style.fontSize=(W*c.sz/100*s[8])+'px';b.style.width=(W*c.wd/100)+'px';b.style.left=c.px+'%';b.style.top=c.py+'%';b.style.transform=`translate(-50%,-50%) rotate(${c.rz}deg) scale(${c.sk})`;
+  const g=1+.9*Math.exp(-Math.max(0,t-c.s)*5)+.12*Math.sin(t*7+c.s*3),r=q=>(q*g*k*c.gl).toFixed(1);
+  c.inn.style.filter=`drop-shadow(0 0 ${r(7)}px ${s[4]}) drop-shadow(0 0 ${r(26)}px ${s[5]}) drop-shadow(0 0 ${r(60)}px ${s[5]})`;c.inn.style.overflow=['charRise','slideMask','flip'].includes(c.fx)?'hidden':'';
+  c.els.forEach(o=>{let x=0,y=0,sc=1,ro=0,rx=0,bl=0,op=1,cp=null,mr=0;const ws=c.words[o.w][1]-.06,G=(a,d)=>E.o3(clamp((t-a)/d));
+   switch(c.fx){case'wordsync':{const p=G(ws,.32);op=p;bl=(1-p)*14;y=(1-p)*38;sc=.9+.1*p;break}
+    case'charRise':{const p=E.o5(clamp((t-(t0+o.c*.022))/.4));y=(1-p)*130;op=clamp(p*3);break}
+    case'spin':{const a=t0+o.w*.08,p=E.bk(clamp((t-a)/.55));ro=(1-p)*-540;sc=p;op=clamp((t-a)/.15);break}
+    case'zoomSlam':{const p=E.o5(clamp((t-t0)/.4));sc=2.4-1.4*p;bl=(1-p)*22;op=clamp(p*2.5);break}
+    case'slideMask':{const p=E.o5(clamp((t-(t0+o.w*.06))/.5));x=(1-p)*-900;break}
+    case'typewriter':{op=t>=c.s+(c.e-c.s)*.8*(o.c+.5)/c.nC-.08?1:0;break}
+    case'bounce':{const p=E.el(clamp((t-ws)/.7));y=(1-p)*-260;op=clamp((t-ws)/.08);break}
+    case'tracking':{const p=E.o3(clamp((t-t0)/.55));mr=(1-p)*20;op=clamp(p*2);bl=(1-p)*8;break}
+    case'flip':{const p=E.o5(clamp((t-(t0+o.w*.07))/.5));rx=(1-p)*-100;y=(1-p)*60;op=clamp(p*2.5);break}
+    case'glitch':{const q=t-t0;if(q<.3){const j=Math.floor(q*30)+o.c;x=(rn(j)-.5)*40;y=(rn(j+9)-.5)*16;op=rn(j+3)>.25?1:.2}break}
+    case'scatter':{const p=E.o5(clamp((t-t0)/.5));x=(rn(o.c+1)-.5)*1400*(1-p);y=(rn(o.c+7)-.5)*800*(1-p);ro=(rn(o.c+3)-.5)*720*(1-p);op=clamp(p*3);sc=.5+.5*p;break}
+    case'wipe':cp=E.io(clamp((t-t0)/.5));break;case'fadeUp':{const p=E.o3(clamp((t-t0)/.5));y=(1-p)*90;op=p;break}
+    case'blurZoom':{const p=E.o3(clamp((t-t0)/.5));sc=.55+.45*p;bl=(1-p)*26;op=p;break}}
+   const q=clamp((t-tE)/tO);let bx=0,by=0,bs=1,br=0,bo=1,bb=0;if(q>0){const e=E.i3(q);switch(c.ex){case'fade':bo=1-e;by=-30*e;break;case'scaleOut':bs=1-.5*e;bo=1-e;bb=10*e;break;case'slideOut':bx=900*e;bo=1-e*.8;break;case'blurUp':bb=24*e;by=-80*e;bo=1-e;break;case'spinOut':br=200*e;bs=1-e*.8;bo=1-e;break;case'dropOut':by=260*e;bo=1-e;br=(rn(o.c)-.5)*40*e;break;case'zoomOut':bs=1+1.2*e;bb=18*e;bo=1-e}}
+   const el=o.el;el.style.opacity=op*bo;el.style.filter=bl+bb>.2?`blur(${((bl+bb)*k).toFixed(1)}px)`:'none';
+   el.style.transform=`translate(${((x+bx)*k).toFixed(1)}px,${((y+by)*k).toFixed(1)}px) rotate(${(ro+br).toFixed(1)}deg) rotateX(${rx.toFixed(1)}deg) scale(${(sc*bs).toFixed(3)})`;el.style.marginRight=(mr*k)+'px';el.style.clipPath=cp!==null?`inset(0 ${((1-cp)*100).toFixed(1)}% 0 0)`:''})})}
+(function loop(){const t=cur();if(hasA&&hasV&&playing&&Math.abs(v.currentTime-au.currentTime)>.15)v.currentTime=au.currentTime;
+ if(playing&&(t>=dur-.02||(stopAt&&t>=stopAt)))toggle();upd(cur());requestAnimationFrame(loop)})();
+[['Import a video, audio and SRT or JSON',.5,3.5],['Pick a block, then pick an animation',4,7]].forEach((x,i)=>cues.push(mk({text:x[0],s:x[1],e:x[2]},i*3)));
+sel=cues[0].id;fitDur();fields();
+const PROMPT=`You are a precise audio transcription and caption-timing agent. I will attach an audio file with this message. Transcribe it and return caption timing files that import directly into my Text Animation Studio.
+
+HOW TO MEASURE
+- Take every timestamp from the actual audio, at word level. If you have a code environment, use a speech-recognition tool that outputs word timestamps (for example Whisper or WhisperX) and use its results.
+- Never guess, estimate, or spread timestamps evenly across a sentence. If you cannot measure word-level timing on this platform, say so in one sentence and stop instead of inventing numbers.
+- All times are in seconds from the very start of the file (0.000), rounded to 3 decimals.
+
+TEXT
+- Write exactly what is spoken. Do not translate, summarize, correct, or add words. Skip coughs, music and noises.
+- Use the language spoken, in its normal script, unless my note at the end says otherwise.
+- Words contain no commas, full stops or quotation marks. Keep apostrophes and hyphens that are part of a word. Keep numbers and English terms as spoken.
+
+CHUNKING (this drives the animation)
+- A chunk is one short phrase of 1 to 6 words, usually under 28 characters.
+- Start a new chunk at every pause of 0.25 seconds or more, at the end of a phrase, and before a chunk would pass 6 words.
+- The chunk start s is its first word start. The chunk end e is its last word end. Do not fill pauses: silence between chunks stays empty.
+- Chunks are in time order and never overlap. Inside a chunk, words are in order, each start is less than its end, and no word overlaps the next.
+
+OUTPUT 1: captions.json
+A single JSON array and nothing else, in exactly this shape (valid JSON, double quotes, no comments, no trailing commas):
+[{"s":3.790,"e":6.030,"words":[["Hello",3.790,4.250],["and",4.250,4.400],["welcome",4.400,6.030]]}]
+
+OUTPUT 2: captions.srt
+The same chunks as standard SRT: numbered from 1, times as HH:MM:SS,mmm --> HH:MM:SS,mmm, the chunk words as the text, a blank line between blocks.
+
+CHECK BEFORE ANSWERING
+- Every s is less than e, chunk times increase, the last e is not past the end of the file, and both outputs hold the same text and times.
+- Tell me the audio duration and the number of chunks in one line.
+
+DELIVERY
+Give me both as downloadable files if your platform can. Otherwise give each in its own code block, JSON first. No other explanation.
+
+MY NOTE (optional, edit or delete; example: Gulf Arabic written in Latin letters, keep English words in English):
+`;
+let tool=0,defDur=2;
+const under=(x,y)=>cues.slice().reverse().find(c=>{const b=boxes[c.id];if(!b||b.style.display=='none')return 0;const r=b.firstChild.getBoundingClientRect();return x>=r.left-6&&x<=r.right+6&&y>=r.top-6&&y<=r.bottom+6});
+function edit(c,x,y){$('#ed')?.remove();pick(c.id);const r=stg.getBoundingClientRect(),ta=document.createElement('textarea');ta.id='ed';ta.placeholder='Type here (বাংলা or English)';ta.value=c.text;ta.style.left=clamp(x-r.left,0,r.width-160)+'px';ta.style.top=clamp(y-r.top,0,r.height-60)+'px';
+ ta.oninput=()=>{c.text=ta.value;c.words=spread(c);rb(c);drawTl();$('#tx').value=c.text};
+ ta.onblur=()=>{ta.remove();if(!c.text.trim()){rb(c);cues=cues.filter(z=>z!=c);sel=0;drawTl();fields()}else if(!playing)setT(c.s+Math.min(.8,(c.e-c.s)/2))};
+ ta.onkeydown=e=>{if(e.key=='Escape'||(e.key=='Enter'&&!e.shiftKey)){e.preventDefault();ta.blur()}};stg.appendChild(ta);setTimeout(()=>ta.focus(),30)}
+$('#ty').onclick=()=>{tool=!tool;$('#ty').classList.toggle('p',!!tool);$('#hit').classList.toggle('ty',!!tool);msg(tool?'Type tool on: click the player to add text at the playhead. Click existing text to edit it. Enter confirms.':'Type tool off: click text to select it, drag to move it, double-click to edit.')};
+$('#hit').onpointerdown=e=>{const h=$('#hit'),r=stg.getBoundingClientRect(),c=under(e.clientX,e.clientY);
+ if(c){pick(c.id);const x0=e.clientX,y0=e.clientY,p0=c.px,q0=c.py;let mv=0;h.setPointerCapture(e.pointerId);
+  h.onpointermove=ev=>{const dx=ev.clientX-x0,dy=ev.clientY-y0;if(Math.abs(dx)+Math.abs(dy)>3)mv=1;if(mv){c.px=clamp(p0+dx/r.width*100,0,100);c.py=clamp(q0+dy/r.height*100,0,100);fields()}};
+  h.onpointerup=()=>{h.onpointermove=h.onpointerup=null;if(!mv&&tool)edit(c,e.clientX,e.clientY)};return}
+ if(tool){const t=cur(),n=mk({s:t,e:t+defDur,text:'',px:+((e.clientX-r.left)/r.width*100).toFixed(1),py:+((e.clientY-r.top)/r.height*100).toFixed(1)},cues.length);cues.push(n);fitDur();edit(n,e.clientX,e.clientY)}};
+$('#hit').ondblclick=e=>{const c=under(e.clientX,e.clientY);if(c)edit(c,e.clientX,e.clientY)};
+$('#du').onchange=e=>{const c=sc();if(c){defDur=Math.max(.2,+e.target.value);setRange(c,c.s,c.s+defDur);fitDur();fields()}};
+$('#ss').onclick=()=>{const c=sc();if(c){setRange(c,Math.min(cur(),c.e-.2),c.e);drawTl();fields()}};
+$('#se').onclick=()=>{const c=sc();if(c){setRange(c,c.s,Math.max(cur(),c.s+.2));fitDur();fields()}};
+function setCues(a,l){Object.values(boxes).forEach(b=>b.remove());boxes={};cues=a.filter(x=>x.text).map(mk);sel=cues[0]?.id||0;$('#mt').textContent=l+' ('+cues.length+')';fitDur();fields()}
+const ix=(L,v)=>{if(typeof v=='number')return v;const q=String(v).toLowerCase();return L.findIndex(x=>[].concat(x).slice(0,2).some(y=>String(y).toLowerCase()==q))};
+function ap(c,o){if(o.s!=null||o.e!=null)setRange(c,o.s??c.s,o.e??c.e);if(o.text!=null){c.text=String(o.text);c.words=spread(c)}
+ const g=(L,v)=>v==null?-1:ix(L,v),f=g(FO,o.font),st=g(ST,o.style),fx=g(FX,o.fx),ex=g(EX,o.exit);if(f>=0)c.fo=f;if(st>=0)c.st=st;if(fx>=0)c.fx=FX[fx][0];if(ex>=0)c.ex=EX[ex][0];
+ [['size','sz'],['x','px'],['y','py'],['rotate','rz'],['scale','sk'],['width','wd'],['glow','gl']].forEach(([a,b])=>{if(o[a]!=null)c[b]=+o[a]});rb(c)}
+function cmd(o){const c=cues.find(x=>x.id==o.id);switch(o.do){
+ case'add':{const t=cur(),s=o.s??t,n=mk({s,e:o.e??s+2,text:String(o.text??'')},cues.length);ap(n,{...o,s:null,e:null,text:null});cues.push(n);sel=n.id;fitDur();fields();return{id:n.id}}
+ case'set':if(!c)return{error:'no such id'};ap(c,o);fitDur();fields();return{ok:1};
+ case'del':if(!c)return{error:'no such id'};rb(c);cues=cues.filter(x=>x!=c);sel=0;fitDur();fields();return{ok:1};
+ case'clear':$('#xt').click();return{ok:1};
+ case'all':cues.forEach(x=>ap(x,o));drawTl();return{ok:1};
+ case'import':setCues(o.cues.map(k=>({...k,s:+k.s,e:+k.e,text:k.text??(k.words||[]).map(w=>w[0]).join(' ')})),'api');return{count:cues.length};
+ case'srt':setCues(parseSrt(o.text),'api srt');return{count:cues.length};
+ case'seek':setT(+o.t);return{t:cur()};case'play':if(!playing)toggle();return{ok:1};case'pause':if(playing)toggle();return{ok:1};
+ case'select':pick(o.id);return{ok:1};
+ case'ratio':$('#rt').value=o.value;$('#rt').onchange({target:$('#rt')});return{ok:1};
+ case'muteVideo':v.muted=!!o.on;btns();return{ok:1};case'muteAudio':au.muted=!!o.on;btns();return{ok:1};case'removeAudio':rmA();return{ok:1};
+ case'export':$(o.as=='srt'?'#xs':'#xj').click();return{text:$('#out').value};
+ default:return{error:'unknown command'}}}
+const GUIDE=`TEXT ANIMATION STUDIO: AGENT GUIDE
+Page API, run in the page console or with your browser tool: window.TAS
+- TAS.state() returns JSON: time, duration, playing, video and audio names, muted flags, selected id, cues[], and the lists fonts[], styles[], fx[], exits[].
+- TAS.run([commands]) runs commands in order and returns one result per command. The same JSON can be pasted into the Command box in the AI agent control panel and run with the Run commands button.
+Commands, each an object with a do field:
+{"do":"add","text":"Hello","s":1.2,"e":3.4,"x":50,"y":50,"font":"Poppins","style":"Neon cyan","fx":"zoomSlam","exit":"fade","size":6.5,"rotate":0,"scale":1,"width":90,"glow":1}  (only text is needed; s defaults to the playhead, e to s+2; x and y are percent of the player; font, style, fx and exit accept a name, key or index)
+{"do":"set","id":3, ...same fields, including a new text...}   {"do":"del","id":3}   {"do":"clear"}
+{"do":"all","font":"Anek Bangla","style":0,"fx":"fadeUp","exit":"fade"}  applies to every block
+{"do":"import","cues":[{"s":1,"e":2,"text":"Hi","words":[["Hi",1,2]]}]}  replaces all blocks, same shape as captions.json   {"do":"srt","text":"<SRT file content>"}
+{"do":"seek","t":2.5}  {"do":"play"}  {"do":"pause"}  {"do":"select","id":3}  {"do":"ratio","value":"9/16"}
+{"do":"muteVideo","on":true}  {"do":"muteAudio","on":true}  {"do":"removeAudio"}  {"do":"export","as":"json"} or "srt" returns the text.
+Media files cannot be sent as JSON. Use the file inputs #fv (video), #fa (audio) and #ft (SRT or JSON) with your browser file-upload tool. Loading a video extracts its audio to the AUDIO track and mutes the video sound; loading audio mutes the video sound too.
+Bengali and English both work. Bengali words animate as whole words so letters never break. Every block has a glow, adjustable with glow from 0.3 to 2.5.
+Workflow: call TAS.state() first, add or import blocks, set fonts, styles and animations, seek to check, and read the results after every run.`;
+window.TAS={state(){return{time:cur(),duration:dur,playing:!!playing,video:$('#mv').textContent,audio:$('#ma').textContent,videoMuted:v.muted,audioMuted:au.muted,selected:sel,cues:cues.map(c=>({id:c.id,s:+c.s.toFixed(3),e:+c.e.toFixed(3),text:c.text,font:FO[c.fo][0],style:ST[c.st][0],fx:c.fx,exit:c.ex,size:c.sz,x:c.px,y:c.py,rotate:c.rz,scale:c.sk,width:c.wd,glow:c.gl})),fonts:FO.map(f=>f[0]),styles:ST.map(s=>s[0]),fx:FX.map(f=>f[0]),exits:EX.map(f=>f[0])}},help:()=>GUIDE,run:c=>[].concat(c).map(o=>{try{return cmd(o)}catch(err){return{error:String(err)}}})};
+$('#cg').onclick=()=>navigator.clipboard?.writeText(GUIDE).then(()=>msg('Agent guide copied. Paste it to your AI agent.'),()=>msg('Could not copy. An agent can read it with TAS.help().'));
+$('#cr').onclick=()=>{try{$('#out').value=JSON.stringify(TAS.run(JSON.parse($('#cb').value)),null,1);msg('Commands ran. Results are in the export box.')}catch(err){msg('Invalid JSON: '+err.message)}};
+$('#pr').value=PROMPT;$('#cp').onclick=()=>{$('#pr').select();navigator.clipboard?.writeText(PROMPT).then(()=>msg('Prompt copied. Paste it into Gemini, ChatGPT or another AI together with your audio file.'),()=>msg('Select the prompt text and copy it.'))};
+</script></body></html>

@@ -1,0 +1,6 @@
+{
+  "name": "Kinetic Typography Video Generator",
+  "description": "An application that generates kinetic typography promo videos from voice audio uploads.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
